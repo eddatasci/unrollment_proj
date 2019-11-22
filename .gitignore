@@ -5,12 +5,13 @@
 # ----------
 
 *.rda
+*.rdata
 *.rds
+*.Rproj
 *.Rproj.user
 *.Rhistory
 *.RData
 *.Ruserdata
-*supercooldatascienceproject.Rproj
 
 # ----------
 # TeX
