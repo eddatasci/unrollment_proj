@@ -71,7 +71,12 @@ load(paste0(cddir,"els.rds"))
 ```{r}
 
 ## recode all less than -3 as missing
+
+
 els<-els%>%mutate_all( ~ifelse(.x< (-3) , NA, .x))
+
+miss_vars<-c(-1,-4,-8,-9)
+els<-els%>%mutate_all( ~ifelse(.x%in% miss_vars , NA, .x))
 
 ## Only people who started at four years
 
