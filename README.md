@@ -13,9 +13,9 @@ To begin with, we'll use data on students beginning at four year institutions in
 
 ## What research question will it answer?
 
-This project will explore the uxe of algorithms to predct student success. In particular, this project will explore how these algorithms reinforce existing inequality. Predicting who does and doesn't currently succeed in our current system says more about the institutions themselves than it does about students, but many times existing patterns of student success are used to justify decisions about who will and won't be given resources. We'd like to explore this tension.
+This project will explore the use of algorithms to predct student success. In particular, this project will explore how these algorithms reinforce existing inequality. Predicting who does and doesn't currently succeed in our current system says more about the institutions themselves than it does about students, but many times existing patterns of student success are used to justify decisions about who will and won't be given resources. We'd like to explore this tension.
 
-##How will these be communicated?
+## How will these be communicated?
 
 In addition to traditional academic venues, we anticipate displaying these results in interactive formats.
 
