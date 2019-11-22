@@ -22,7 +22,7 @@ In addition to traditional academic venues, we anticipate displaying these resul
 ## Who's on the core team? 
 [Will Doyle](https://peabody.vanderbilt.edu/bio/william-doyle), 
 [Ozan Jaquette](https://emraresearch.org/), 
-[Patricia Martin](https://emraresearch.org/)
+[Patricia Martin](https://emraresearch.org/),
 [Karina Salazar](https://www.coe.arizona.edu/karina-g-salazar), 
 [Ben Skinner](btskinner.me)
 
