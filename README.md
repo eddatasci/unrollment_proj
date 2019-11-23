@@ -19,6 +19,7 @@ codebook](https://nces.ed.gov/OnlineCodebook/).
 
 ## What research question will it answer?
 
+
 This project will explore the uxe of algorithms to predct student
 success. In particular, this project will explore how these algorithms
 reinforce existing inequality. Predicting who does and doesn't
@@ -28,6 +29,7 @@ existing patterns of student success are used to justify decisions
 about who will and won't be given resources. We'd like to explore this
 tension.
 
+
 ## How will these be communicated?
 
 In addition to traditional academic venues, we anticipate displaying
@@ -36,7 +38,7 @@ these results in interactive formats.
 ## Who's on the core team? 
 [Will Doyle](https://peabody.vanderbilt.edu/bio/william-doyle), 
 [Ozan Jaquette](https://emraresearch.org/), 
-[Patricia Martin](https://emraresearch.org/)
+[Patricia Martin](https://emraresearch.org/),
 [Karina Salazar](https://www.coe.arizona.edu/karina-g-salazar), 
 [Benjamin Skinner](https://btskinner.io)
 
