@@ -1,5 +1,5 @@
 ---
-title: "Predicting graduation rates"
+title: "Predicting Graduation Rates"
 output: github_document
 ---
 
@@ -26,19 +26,8 @@ cddir<-"../../data/cleaned/"
 ## Ben: what's the pipe function for paste0? could use it here
 ```
 
-
+Analysis Variables
 ```{r}
-# Load R Data File
-if(file.exists(paste0(cddir,"els.Rds"))==FALSE){
-
-load(paste0(rddir,"els_02_12_byf3pststu_v1_0.rdata"))
-
-els<-els_02_12_byf3pststu_v1_0
-
-rm(els_02_12_byf3pststu_v1_0)
-
-names(els)<-tolower(names(els))
-
 # Create vector of selected variables
 keepvars <- tolower(c(
    "stu_id", ## Student ID
@@ -54,6 +43,20 @@ keepvars <- tolower(c(
    "F3ATTAINMENT", ## Atainment
    "F2PS1SEC" ##First inst attended
    ))
+```
+
+
+```{r}
+# Load R Data File
+if(file.exists(paste0(cddir,"els.Rds"))==FALSE){
+
+load(paste0(rddir,"els_02_12_byf3pststu_v1_0.rdata"))
+
+els<-els_02_12_byf3pststu_v1_0
+
+rm(els_02_12_byf3pststu_v1_0)
+
+names(els)<-tolower(names(els))
 
 keepvars<-tolower(keepvars)
 
@@ -69,9 +72,7 @@ load(paste0(cddir,"els.rds"))
 
 ## Recoding 
 ```{r}
-
 ## recode all less than -3 as missing
-
 
 els<-els%>%mutate_all( ~ifelse(.x< (-3) , NA, .x))
 
@@ -90,11 +91,11 @@ els%>%
 ## average bachelor's completion overall
 
 els%>%summarize(mean(ba_complete))
-
-
 ```
 
 ## Split to analysis data
+
+Selecting just the variables desired for the analysis dataset. 
 ```{r}
 
 ##Need to generalize, want a better process for vars
@@ -108,9 +109,10 @@ els%>%
 
 ```
 
+
+As with most NCES datasets, this one is almost entirely categorical variables. The code below creates a character vector of the names of variables that have fewer than 20 unique values, then mutates those to be factors. 
 ```{r}
 ## set factor variables
-
 
 ## Number of unique values
 few_unique<-function(x){
@@ -121,60 +123,82 @@ few_unique<-function(x){
 ## Quickly identify likely factor variables
 els_a%>%
    select_if( ~ (few_unique(.)))%>%
+   select(-ba_complete)%>%
    names(.)->likely_factors
 
 ## Mutate to be factors
 els_a%>%
    mutate_at(.vars=likely_factors,.funs=as_factor)->els_a
 
+## Better factor levels for outcome
+
+els_a%>%
+   mutate(ba_complete=recode_factor(ba_complete,
+                                    "1"="Completed",
+                                    "0"="Not Completed"))->els_a
+```
+
+## Structure for resampling
+
+Use: https://tidymodels.github.io/rsample/articles/Applications/Recipes_and_rsample.html
+
+```{r}
+boot_reps<-10
+
+validation_data <- mc_cv(els_a, prop = 0.8, times =boot_reps )
 ```
 
 
-## Formula
+
+## Recipe
+
+Formula is just dv and everything else.
+
 ```{r}
-grad_rec<-recipe(ba_complete~.,
+ba_complete_formula<-formula("ba_complete~.")
+```
+
+
+```{r}
+
+## NB: Alternatively, a recipe object can be created by first specifying which variables in a data set should be used and then sequentially defining their roles .
+
+grad_rec<-recipe(formula = ba_complete_formula,
                  data=els_a)
 ```
 
 
-## Pre Processing
+## Pre-Processing
 
-### Imputation
+
+
+### Pre-processing
 ```{r}
-imputed<-
-   grad_rec%>%
-   step_knnimpute(all_predictors())
-```
 
+grad_rec %>%
+   step_knnimpute(all_predictors()) %>% #This is dicey, and should be improved, but it's a start. Using K nearest neighbors to impute.
+   step_dummy(one_of(likely_factors)) %>% ## Convert factors to dummy
+   step_center(all_predictors())  %>%
+   step_scale(all_predictors())->standardized
 
-### Dummy Variables
-```{r}
-ind_vars<-imputed%>%
-   step_dummy(all_predictors(),-bynels2r,-bynels2m,)
-```
-
-
-### Scaling
-```{r}
-standardized <- ind_vars %>%
-  step_center(all_predictors())  %>%
-  step_scale(all_predictors()) 
+   
 ```
 
 
 ```{r}
-trained_rec <- prep(standardized, training = els_a)
+prepped_data <- prep(standardized, training = els_a)
 ```
 
 ```{r}
-train_data<-bake(trained_rec, new_data =els_a)
+train_data<-bake(prepped_data, new_data =els_a)
 ```
 
 ```{r}
 
 logit_fit<-logistic_reg(mode="classification")%>%
   set_engine("glm")%>%
-  fit(ba_complete~.,data=juice(trained_rec))
+  fit(formula=ba_complete_formula,
+     data=train_data)
 
 ```
 
