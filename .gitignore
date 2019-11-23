@@ -1,5 +1,43 @@
-.Rproj.user
-.Rhistory
-.RData
-.Ruserdata
-supercooldatascienceproject.Rproj
+# .gitignore
+
+# ----------
+# R
+# ----------
+
+*.rda
+*.rdata
+*.rds
+*.Rproj
+*.Rproj.user
+*.Rhistory
+*.RData
+*.Ruserdata
+
+# ----------
+# TeX
+# ----------
+
+*.aux
+*.lof
+*.log
+*.lot
+*.fls
+*.out
+*.toc
+*.fmt
+*.fot
+*.cb
+*.cb2
+*.bbl
+*.bcf
+*.blg
+*-blx.aux
+*-blx.bib
+*.run.xml
+
+# ----------
+# MacOS
+# ----------
+
+*.DS_Store
+Icon
