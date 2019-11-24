@@ -135,19 +135,21 @@ els_a%>%
 els_a%>%
    mutate(ba_complete=recode_factor(ba_complete,
                                     "1"="Completed",
-                                    "0"="Not Completed"))->els_a
+                                    "0"="Incomplete"))->els_a
 ```
 
 ## Structure for resampling
 
 Use: https://tidymodels.github.io/rsample/articles/Applications/Recipes_and_rsample.html
 
+Dataset is restructured for 80/20 split, with specified number of bootstrap 
+replicates. 
+
 ```{r}
-boot_reps<-10
+boot_reps<-1000
 
 validation_data <- mc_cv(els_a, prop = 0.8, times =boot_reps )
 ```
-
 
 
 ## Recipe
@@ -163,49 +165,99 @@ ba_complete_formula<-formula("ba_complete~.")
 
 ## NB: Alternatively, a recipe object can be created by first specifying which variables in a data set should be used and then sequentially defining their roles .
 
-grad_rec<-recipe(formula = ba_complete_formula,
-                 data=els_a)
-```
-
-
-## Pre-Processing
-
-
-
-### Pre-processing
-```{r}
-
-grad_rec %>%
-   step_knnimpute(all_predictors()) %>% #This is dicey, and should be improved, but it's a start. Using K nearest neighbors to impute.
-   step_dummy(one_of(likely_factors)) %>% ## Convert factors to dummy
-   step_center(all_predictors())  %>%
-   step_scale(all_predictors())->standardized
-
+recipe_function <- function(dataset, formula, likely_factors) {
+   ## recipe function: this function takes a dataset and formula,
+   ## then imputes, converts likely factors, and centers and scales
+   ## Predictors
+   ## datset: duh
+   ## formula: formula object
+   ## likely_factors: character vector of likely factors
    
+   recipe(formula = formula,
+          data = dataset) %>%
+      step_knnimpute(all_predictors()) %>% #This is dicey, and should be improved, but it's a start. Using K nearest neighbors to impute.
+      step_dummy(one_of(likely_factors)) %>% ## Convert factors to dummy
+      step_center(all_predictors())  %>%
+      step_scale(all_predictors())
+}
+         
 ```
 
 
 ```{r}
-prepped_data <- prep(standardized, training = els_a)
+#H/T: https://www.brodrigues.co/blog/2018-11-25-tidy_cv/
+
+
+grad_class <- function(formula, likely_factors,split, id) {
+   ## Classification function
+   ## Takes formula, factor variables (meh) and split/id 
+   ## from bootstrapped dtaset.
+   ## fits model, generates predictions,
+   ## outputs to results dataframe
+   pb$tick()$print()
+   
+   ## Pull analysis dataset from split
+   analysis_set <- analysis(split)
+   
+   ## Prep analysis dataset using recipe function above
+   analysis_prep <- prep(recipe_function(analysis_set, 
+                                         formula,
+                                         likely_factors),
+                         training = analysis_set)
+   
+   ## Output model matrix and outcome
+   analysis_processed <-
+      bake(analysis_prep, new_data = analysis_set)
+   
+   logit_fit <- logistic_reg(mode = "classification") %>%
+      set_engine("glm") %>%
+      fit(formula = formula,
+          data = analysis_processed)
+   
+   ## Prep testing (assessment) dataset
+   assessment_set <- assessment(split)
+   
+   assessment_prep <-
+      prep(recipe_function(assessment_set,
+                           formula,
+                           likely_factors), 
+           testing = assessment_set)
+   
+   assessment_processed <-
+      bake(assessment_prep, new_data = assessment_set)
+   
+   ## Output results as data frame
+   tibble(
+      "id" = id,
+      "truth" = assessment_processed$ba_complete)%>%
+         bind_cols(
+            predict(logit_fit,
+                    new_data=assessment_processed,
+                    type="prob"))
+}
 ```
 
 ```{r}
-train_data<-bake(prepped_data, new_data =els_a)
+pb<-progress_estimated(dim(validation_data[1]))
+results <- map2_df(.x = validation_data$splits,
+                           .y = validation_data$id,
+                           ~grad_class(formula=formula,
+                                       likely_factors = likely_factors,
+                                       split = .x, 
+                                       id = .y))
+```
+
+
+```{r}
+results%>%
+   group_by(id)%>%
+   roc_auc(truth=truth,
+           prediction=.pred_Completed)->auc
 ```
 
 ```{r}
-
-logit_fit<-logistic_reg(mode="classification")%>%
-  set_engine("glm")%>%
-  fit(formula=ba_complete_formula,
-     data=train_data)
-
+gg<-gplot(auc,aes(x=.metric))
+gg<-gg+geom_density(fill="lightblue",alpha=.5)
+gg
 ```
-
-```{r}
-logit_fit$fit%>%summary()
-```
-
-
-
 
