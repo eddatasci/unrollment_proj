@@ -4,7 +4,8 @@
 # directories
 # ----------
 
-data
+/data/raw/*
+/data/cleaned/*
 !/data/raw/readme.md
 !/data/cleaned/readme.md
 
