@@ -3,7 +3,7 @@
 
 ## Concept
 
-The baisc idea is that we work on this project in an open,
+The basic idea is that we work on this project in an open,
 reproducible format. Our initial goal is to develop a highly
 predictive algorithm for predicting bachelor's degree completion
 useing data from the 2002 ELS. We'd like to demystify what goes into
