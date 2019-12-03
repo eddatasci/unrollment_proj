@@ -1,4 +1,4 @@
-# Predicting Bachelor's Degree Completion 
+# The Unrollment Project: Exploring algorithmic bias in predicting bachelor's degree completion 
 
 
 ## Concept
@@ -6,7 +6,7 @@
 The basic idea is that we work on this project in an open,
 reproducible format. Our initial goal is to develop a highly
 predictive algorithm for predicting bachelor's degree completion
-useing data from the 2002 ELS. We'd like to demystify what goes into
+using data from the 2002 ELS. We'd like to demystify what goes into
 creating these algorithms, and also describe how they can be
 used/misused.
 
@@ -20,7 +20,7 @@ codebook](https://nces.ed.gov/OnlineCodebook/).
 ## What research question will it answer?
 
 
-This project will explore the uxe of algorithms to predct student
+This project will explore the use of algorithms to predict student
 success. In particular, this project will explore how these algorithms
 reinforce existing inequality. Predicting who does and doesn't
 currently succeed in our current system says more about the
@@ -44,7 +44,7 @@ these results in interactive formats.
 
 ## Can I contribute? 
 
-Feel free to download the repo and use what we've posted. If you'd
+Feel free to download the repository and use what we've posted. If you'd
 like to be included on this project, submit a pull request. Depending
 on the core team's decision regarding the level of contribution, an
 accepted pull request will either be acknowledge, or could result in
