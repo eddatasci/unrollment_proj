@@ -1,6 +1,25 @@
 # .gitignore
 
 # ----------
+# directories
+# ----------
+
+/data/raw/*
+/data/cleaned/*
+!/data/raw/readme.md
+!/data/cleaned/readme.md
+
+scripts/rmd/*.html
+scripts/rmd/*.md
+!scripts/rmd/readme.md
+
+# ----------
+# general
+# ----------
+
+.zip
+
+# ----------
 # R
 # ----------
 
