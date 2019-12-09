@@ -89,7 +89,7 @@ defined and clarified by project maintainers.
 ## Enforcement
 
 Instances of abusive, harassing, or otherwise unacceptable behavior
-may be reported by contacting Benjamin Skinner directly at
+may be reported by contacting Will Doyle at w.doyle@vanderbilt.edu or Benjamin Skinner directly at
 btskinner@coe.ufl.edu or any other member of the core project team:
 
 - [Will Doyle](https://peabody.vanderbilt.edu/bio/william-doyle), 
