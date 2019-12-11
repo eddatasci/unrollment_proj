@@ -25,6 +25,7 @@ fgdir <- file.path(tldir, "figures")
 els_zip <- "ELS_2002-12_PETS_v1_0_Student_CSV_Datasets.zip"
 els_url <- file.path("https://nces.ed.gov/EDAT/Data/Zip", els_zip)
 els_rds <- "els.rds"
+results_rds<-"results.rds"
 ```
 ```{r}
 ## knitr settings
@@ -78,7 +79,6 @@ file is found, the script moves forward. If it's missing, the code
 next checks for the zipped file, downloading it if necessary. Once the
 zipped file is present, it is unpacked and the working data file
 created.
-
 
 ```{r}
 ## variables we want to select from full ELS dataset, also setting
@@ -268,12 +268,19 @@ grad_class <- function(formula, likely_factors, split, id, prog_bar) {
                   "truth" = assessment_processed[["ba_complete"]]) %>%
            bind_cols(predict(logit_fit,
                              new_data = assessment_processed,
-                             type = "prob")))
+                             type = "prob")))%>%
+           bind_cols(predict(logit_fit,
+                             new_data = assessment_processed,
+                             type="class"))
 }
 ```
 
 ```{r}
-pb <- progress_estimated(dim(validation_data)[1])
+## DONT RUN UNLESS YOU HAVE TO
+if (unzip_again || !file.exists(file.path(cddir, results_rds))) {
+
+pb <- progress_estimated(dim(validation_data)[1]) ## Progress across elements of validation data
+
 results <- map2_df(.x = validation_data[["splits"]],
                    .y = validation_data[["id"]],
                    ~ grad_class(formula = ba_complete_formula,
@@ -281,6 +288,13 @@ results <- map2_df(.x = validation_data[["splits"]],
                                 split = .x, 
                                 id = .y,
                                 prog_bar = pb))
+
+write_rds(results,path=file.path(cddir, results_rds))
+} else
+{
+read_rds(path=file.path(cddir, results_rds))    
+}
+
 ```
 
 ```{r}
@@ -288,7 +302,8 @@ results <- map2_df(.x = validation_data[["splits"]],
 auc <- results %>%
     group_by(id) %>%
     roc_auc(truth = truth,
-            prediction = .pred_Completed)
+            prediction = .pred_Completed,
+            )
 ```
 
 ```{r dens_auc}
