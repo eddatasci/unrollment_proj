@@ -232,6 +232,10 @@ grad_class <- function(formula, likely_factors,split, id) {
       "truth" = assessment_processed$ba_complete)%>%
          bind_cols(
             predict(logit_fit,
+                    new_data=assessment_processed)
+         )%>%
+         bind_cols(
+            predict(logit_fit,
                     new_data=assessment_processed,
                     type="prob"))
 }
@@ -241,6 +245,10 @@ grad_class <- function(formula, likely_factors,split, id) {
 
 
 ```{r}
+
+system("rm ../../data/cleaned/results.rds")
+
+
 if(!file.exists(paste0(cddir,"results.rds"))){
    
 pb<-progress_estimated(dim(validation_data)[1])
@@ -260,57 +268,9 @@ results <- map2_df(.x = validation_data$splits,
 ```
 
 
-```{r}
-pb<-progress_estimated(length(unique(results$id)))
-
-roc_auc_error<-function(data,truth,prediction){
-   tryCatch(
-      {
-      roc_auc(data,truth,prediction)
-         },
-        error=function(cnd) {
-           return(NA)
-        }
-   )
-}
-
-
-results <- map2_df(.x = results$splits,
-                   .y = validation_data$id,
-                   ~roc_auc_error(data=.,
-                                  truth=truth,
-                                  prediction=.pred_Completed,
-                                  split=.x,
-                                  id=.y)
-                           ~grad_class(formula=ba_complete_formula,
-                                       likely_factors = likely_factors,
-                                       split = .x, 
-                                       id = .y))
-results%>%
-   m
-
-
-   summarize(AUC=roc_auc_error(data=.,truth=truth,prediction=.pred_Completed))->auc_summary
-
-   roc_auc_error(data=results_sub,
-                            truth=results_sub$truth,
-                            prediction=results_sub$`.pred_Completed`)
-
-results_sub%>%roc_auc(data=.,
-                            truth=truth,
-                            prediction=.pred_Completed)
-
-
-results_sub<-filter(results,id=="Resample0002")      
-   
-results_sub<-filter(results,id=="Resample0001")   
-
-results_sub%>%roc_auc_error
-```
 
 ```{r}
-gg<-ggplot(auc,aes(x=.metric))
-gg<-gg+geom_density(fill="lightblue",alpha=.5)
-gg
+results%>%metrics(truth=truth,.pred,.pred_Completed)
+
 ```
 
