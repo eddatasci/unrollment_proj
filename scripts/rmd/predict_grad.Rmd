@@ -79,7 +79,6 @@ next checks for the zipped file, downloading it if necessary. Once the
 zipped file is present, it is unpacked and the working data file
 created.
 
-
 ```{r}
 ## variables we want to select from full ELS dataset, also setting
 ## data type for faster input since ELS is much larger than we need
@@ -273,7 +272,11 @@ grad_class <- function(formula, likely_factors, split, id, prog_bar) {
 ```
 
 ```{r}
-pb <- progress_estimated(dim(validation_data)[1])
+## DONT RUNN UNLESS YOU HAVE TO
+if (unzip_again || !file.exists(file.path(cddir, results_rds))) {
+
+pb <- progress_estimated(dim(validation_data)[1]) ## Progress across elements of validation data
+
 results <- map2_df(.x = validation_data[["splits"]],
                    .y = validation_data[["id"]],
                    ~ grad_class(formula = ba_complete_formula,
@@ -281,6 +284,11 @@ results <- map2_df(.x = validation_data[["splits"]],
                                 split = .x, 
                                 id = .y,
                                 prog_bar = pb))
+} else
+{
+    
+}
+
 ```
 
 ```{r}
