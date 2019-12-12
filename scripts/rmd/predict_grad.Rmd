@@ -276,7 +276,11 @@ grad_class <- function(formula, likely_factors, split, id, prog_bar) {
 ```
 
 ```{r}
+<<<<<<< HEAD
 ## DONT RUN UNLESS YOU HAVE TO
+=======
+## DONT RUNN UNLESS YOU HAVE TO
+>>>>>>> 614e247f0f4737aba2e3e64bc1e5d4dd94a7af86
 if (unzip_again || !file.exists(file.path(cddir, results_rds))) {
 
 pb <- progress_estimated(dim(validation_data)[1]) ## Progress across elements of validation data
@@ -287,13 +291,13 @@ results <- map2_df(.x = validation_data[["splits"]],
                                 likely_factors = likely_factors,
                                 split = .x, 
                                 id = .y,
-                                prog_bar = pb))
+
 
 write_rds(results,path=file.path(cddir, results_rds))
 } else
 {
 read_rds(path=file.path(cddir, results_rds))    
-}
+} 
 
 ```
 
