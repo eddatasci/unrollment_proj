@@ -288,7 +288,7 @@ results <- map2_df(.x = validation_data[["splits"]],
                    ~ grad_class(formula = ba_complete_formula,
                                 likely_factors = likely_factors,
                                 split = .x, 
-                                id = .y,
+                                id = .y))
 
 
 write_rds(results,path=file.path(cddir, results_rds))
