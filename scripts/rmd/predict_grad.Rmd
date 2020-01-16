@@ -284,8 +284,6 @@ if (unzip_again || !file.exists(file.path(cddir, results_rds))) {
     ## progress across elements of validation data
     pb <- progress_estimated(dim(validation_data)[1]) 
 
-
-
     ## get results
     results <- map2_df(.x = validation_data[["splits"]],
                        .y = validation_data[["id"]],
@@ -300,7 +298,7 @@ if (unzip_again || !file.exists(file.path(cddir, results_rds))) {
 
 } else {
     ## read existing results
-    read_rds(path=file.path(cddir, results_rds))    
+    results<-read_rds(path=file.path(cddir, results_rds))    
 } 
 
 ```
