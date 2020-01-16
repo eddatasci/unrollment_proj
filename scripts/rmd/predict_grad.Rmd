@@ -25,7 +25,7 @@ fgdir <- file.path(tldir, "figures")
 els_zip <- "ELS_2002-12_PETS_v1_0_Student_CSV_Datasets.zip"
 els_url <- file.path("https://nces.ed.gov/EDAT/Data/Zip", els_zip)
 els_rds <- "els.rds"
-results_rds<-"results.rds"
+results_rds <- "results.rds"
 ```
 ```{r}
 ## knitr settings
@@ -269,9 +269,9 @@ grad_class <- function(formula, likely_factors, split, id, prog_bar) {
            bind_cols(predict(logit_fit,
                              new_data = assessment_processed,
                              type = "prob")))%>%
-           bind_cols(predict(logit_fit,
-                             new_data = assessment_processed,
-                             type="class"))
+        bind_cols(predict(logit_fit,
+                          new_data = assessment_processed,
+                          type = "class"))
 }
 ```
 
@@ -281,20 +281,26 @@ grad_class <- function(formula, likely_factors, split, id, prog_bar) {
 
 if (unzip_again || !file.exists(file.path(cddir, results_rds))) {
 
-pb <- progress_estimated(dim(validation_data)[1]) ## Progress across elements of validation data
-
-results <- map2_df(.x = validation_data[["splits"]],
-                   .y = validation_data[["id"]],
-                   ~ grad_class(formula = ba_complete_formula,
-                                likely_factors = likely_factors,
-                                split = .x, 
-                                id = .y))
+    ## progress across elements of validation data
+    pb <- progress_estimated(dim(validation_data)[1]) 
 
 
-write_rds(results,path=file.path(cddir, results_rds))
-} else
-{
-read_rds(path=file.path(cddir, results_rds))    
+
+    ## get results
+    results <- map2_df(.x = validation_data[["splits"]],
+                       .y = validation_data[["id"]],
+                       ~ grad_class(formula = ba_complete_formula,
+                                    likely_factors = likely_factors,
+                                    split = .x, 
+                                    id = .y,
+                                    pb))
+    ## write results as rds
+    write_rds(results, path = file.path(cddir, results_rds))
+
+
+} else {
+    ## read existing results
+    read_rds(path=file.path(cddir, results_rds))    
 } 
 
 ```
@@ -302,10 +308,10 @@ read_rds(path=file.path(cddir, results_rds))
 ```{r}
 ## get AUC across bootstraps
 auc <- results %>%
+    filter(!is.na(.pred_Completed)) %>% 
     group_by(id) %>%
     roc_auc(truth = truth,
-            prediction = .pred_Completed,
-            )
+            prediction = .pred_Completed)
 ```
 
 ```{r dens_auc}
