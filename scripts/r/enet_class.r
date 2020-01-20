@@ -13,10 +13,8 @@
 #' @example 
 
 
-
 enet_class <- function(formula, likely_factors, split, id, depvar, prog_bar) {
 
-  
   prog_bar$tick()$print()
   
   ## pull training (analysis) dataset from split
@@ -31,9 +29,13 @@ enet_class <- function(formula, likely_factors, split, id, depvar, prog_bar) {
   ## output model matrix and outcome
   analysis_processed <- bake(analysis_prep, new_data = analysis_set)
   
-  penalized <- logistic_reg()
-  ## fit logit regression (due to binary outcome)
-  logit_fit <- logistic_reg(mixture = 0.1, penalty = 0.1,mode="classification") %>%
+  
+  ## fit logit regression via elastic net (due to binary outcome)
+  ## Need to think about implementing a grid search here
+  ## dials function could be helpful 
+  logit_fit <- logistic_reg(mixture = 0.1,
+                            penalty = 0.1,
+                            mode="classification") %>%
     set_engine("glmnet") %>%
     fit(formula = formula,
         data = analysis_processed)
