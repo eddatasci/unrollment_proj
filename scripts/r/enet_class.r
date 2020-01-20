@@ -8,16 +8,14 @@
 #' @param split data that has been structured for cross validation
 #' @param depvar name of dependent variable, character
 #' @param prog_bar name of progress object bar THIS IS BAD AND NEEDS TO NOT BE BAD 
-#' @return a tibble of results, with 
+#' @return a tibble of results, with columns id, truth, classifications results:
+#' prediction of positive outcome, negative outcome, and probability of positive outcome
+#' @example 
 
-enet_class <- function(formula, likely_factors, split, id, ,depvar prog_bar) {
-  ## PURPOSE
-  ## This is a classification function that takes formula,
-  ## factor variables (meh), and split/id from bootstrapped dataset; then
-  ##
-  ## (1) fits model
-  ## (2) generates predictions
-  ## (3) outputs to results dataframe
+
+
+enet_class <- function(formula, likely_factors, split, id, depvar, prog_bar) {
+
   
   prog_bar$tick()$print()
   
