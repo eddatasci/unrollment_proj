@@ -1,4 +1,5 @@
 language: r
+cache: packages
 
 install:
     - Rscript ./scripts/r/install_packages.r 
