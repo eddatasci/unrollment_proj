@@ -12,4 +12,4 @@ args <- commandArgs(trailingOnly = TRUE)
 root <- ifelse(length(args) == 0, file.path(".."), args)
 
 ## run all tests in directory
-testthat::test_dir(file.path(root, "tests", "testthat"))
+testthat::test_dir(file.path(root, "tests", "testthat"), stop_on_failure = TRUE)
