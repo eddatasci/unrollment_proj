@@ -1,4 +1,4 @@
-context("make_cv_df")
+context("Cross validation function")
 source("../../scripts/r/func_cv.r")
 
 test_that("Cannot call sampling method with string", {
