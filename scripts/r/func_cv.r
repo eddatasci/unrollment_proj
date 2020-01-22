@@ -16,7 +16,7 @@
 ## OUTPUT: tibble structured for cross validation
 ##
 ## NOTES:
-## - using {tidymodels} framework
+## - using {rsample} from {tidymodels} framework
 ##
 ## -----------------------------------------------------------------------------
 
@@ -26,7 +26,7 @@ make_cv_df <- function(df,
                        ) {
 
     ## requires tidymodels; stop if not installed
-    if (!require("tidymodels")) { stop("tidymodels not installed") }
+    if (!require("rsample")) { stop("rsample not installed") }
 
     if (!is.character(tm_resample_method)) {
         ## convert if argument name not already a string...
@@ -37,7 +37,7 @@ make_cv_df <- function(df,
     }
 
     ## get function from tidymodels
-    fun <- get(fun_name, asNamespace("tidymodels"))
+    fun <- get(fun_name, asNamespace("rsample"))
 
     ## call argument with arguments
     fun(df, ...)
