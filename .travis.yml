@@ -1,5 +1,4 @@
 language: r
-sudo: false
 cache: packages
 
 env:
@@ -21,10 +20,11 @@ before_install:
   - echo "CXX14FLAGS = -mtune=native -march=native -Wno-unused-variable -Wno-unused-function -Wno-unused-local-typedefs -Wno-ignored-attributes -Wno-deprecated-declarations -Wno-attributes -O3" >> ~/.R/Makevars
 
 install:
-    - Rscript ./scripts/r/install_packages.r 
+  - R -e "install.packages('rstan')"
+  - Rscript ./scripts/r/install_packages.r 
 
 script:
-    - Rscript ./tests/testthat.R $TRAVIS_BUILD_DIR
+  - Rscript ./tests/testthat.R $TRAVIS_BUILD_DIR
 
 notifications:
   email:
