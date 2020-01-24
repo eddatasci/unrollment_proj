@@ -147,3 +147,55 @@ grad_rec<-recipe(formula=ba_complete_formula,data=df_a)%>%
   step_center(all_predictors())  %>%
   ## rescale all predictors
   step_scale(all_predictors())
+
+
+## Set Model (This is the only thing that needs to vary)
+grad_mod<-
+  logistic_reg(penalty=tune(),mixture = tune())%>%
+  set_engine("glmnet")
+
+##Set Workflow 
+grad_wfl<-
+  workflow()%>%
+  add_recipe(grad_rec)%>%
+  add_model(grad_mod)
+
+
+
+## Tuning Grid
+glmn_param <- parameters(penalty(), mixture())
+
+glmn_sfd <- grid_max_entropy(glmn_param, size = 50)
+
+knn_grid <- knn_mod %>% parameters() %>% grid_max_entropy(size=50)
+
+ctrl <- control_grid(verbose = FALSE,save_pred=TRUE)
+
+## Generate Results
+
+results_again=TRUE
+
+if (results_again || !file.exists(file.path(cddir, results_rds))) {
+  
+  grad_res<-tune_grid(grad_wfl,
+                           resamples=validation_data,
+                           control=ctrl)
+                        
+                        #control_resamples(save_pred=TRUE))
+  
+  write_rds(grad_res, path = file.path(cddir, results_rds))
+} else{
+read_rds(file.path(cddir,results_rds))
+}
+
+auc<-grad_res%>%
+  collect_metrics(summarize=FALSE)%>%
+  filter(.metric=="roc_auc")
+
+
+g <- ggplot(auc, aes(x = .estimate)) +
+  geom_density(fill = "lightblue", alpha = .5) +
+  labs(x = "AUC",
+       y = "Density")
+
+
