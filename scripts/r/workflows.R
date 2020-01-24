@@ -8,6 +8,7 @@ library(tidyverse)
 library(tidymodels)
 library(workflows)
 library(tune)
+library(doParallel)
 
 ## top-level directory; everything else is relative to here
 tldir <- file.path("..", "..")
@@ -138,15 +139,15 @@ ba_complete_formula <- formula("ba_complete ~ .")
 
 ## Set recipe
 grad_rec<-recipe(formula=ba_complete_formula,data=df_a)%>%
-  ## NB: this is dicey and should be improved, but it's a
-  ## start; using K nearest neighbors to impute.
-  step_knnimpute(all_predictors()) %>%
   ## convert factors to dummy
-  step_dummy(one_of(likely_factors)) %>%
+  step_dummy(tidyselect::one_of(likely_factors)) %>%
   ## center predictors
   step_center(all_predictors())  %>%
   ## rescale all predictors
-  step_scale(all_predictors())
+  step_scale(all_predictors()) %>%
+  ## NB: this is dicey and should be improved, but it's a
+  ## start; using K nearest neighbors to impute.
+  step_knnimpute(all_predictors()) 
 
 
 ## Set Model (This is the only thing that needs to vary)
@@ -160,16 +161,19 @@ grad_wfl<-
   add_recipe(grad_rec)%>%
   add_model(grad_mod)
 
-
-
 ## Tuning Grid
-glmn_param <- parameters(penalty(), mixture())
+#glmn_param <- parameters(penalty(), mixture())
 
-glmn_sfd <- grid_max_entropy(glmn_param, size = 50)
+#glmn_sfd <- grid_max_entropy(glmn_param, size = 50)
 
-knn_grid <- knn_mod %>% parameters() %>% grid_max_entropy(size=50)
+#glmn_grid <- grad_wfl %>% parameters() %>% grid_max_entropy(size=50)
 
-ctrl <- control_grid(verbose = FALSE,save_pred=TRUE)
+#glmn_grid <- expand.grid(penalty = 10^seq(-3, -1, length = 20), mixture = (0:5)/5)
+
+ctrl <- control_resamples(allow_par = TRUE,
+                          verbose = FALSE,
+                          save_pred=TRUE,
+                          extract=TRUE)
 
 ## Generate Results
 
@@ -177,25 +181,43 @@ results_again=TRUE
 
 if (results_again || !file.exists(file.path(cddir, results_rds))) {
   
+#cl<-makeCluster(4)
+
+## Parallelalalalize
+#registerDoParallel(cl)
+
   grad_res<-tune_grid(grad_wfl,
-                           resamples=validation_data,
-                           control=ctrl)
-                        
-                        #control_resamples(save_pred=TRUE))
+                      resamples=validation_data,
+                      control=ctrl
+                      )
+#stopCluster(cl)                        
+
+## Notes: Right now, works just fine without parallel approach
+  ## Throws an error one_of() not found.
+  ## Seems like a scoping issue
   
   write_rds(grad_res, path = file.path(cddir, results_rds))
 } else{
-read_rds(file.path(cddir,results_rds))
+grad_res<-read_rds(file.path(cddir,results_rds))
 }
 
-auc<-grad_res%>%
-  collect_metrics(summarize=FALSE)%>%
+
+## Best results from tuning
+show_best(grad_res, metric = "roc_auc", maximize = FALSE)
+
+
+## Get AUC
+roc_auc_vals<-
+  collect_metrics(grad_res)%>%
   filter(.metric=="roc_auc")
 
 
-g <- ggplot(auc, aes(x = .estimate)) +
-  geom_density(fill = "lightblue", alpha = .5) +
-  labs(x = "AUC",
-       y = "Density")
+## PLot tuned results
+roc_auc_vals %>%
+  mutate(mixture = format(mixture)) %>%
+  ggplot(aes(x = penalty, y = mean, col = mixture)) +
+  geom_point() +
+  scale_x_log10()
+
 
 
