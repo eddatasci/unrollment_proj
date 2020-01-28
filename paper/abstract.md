@@ -1,20 +1,20 @@
 
 
-In this project we seek to use `R` as an open source platform to provide
-transparency around how predictive algorithms in higher education are
-estimated and how decisions made on the basis of these algorithms
-might affect underrepresented students in higher education. Many times
-decision makers in colleges who use these predictive algorithms do not
-understand how the predictive models themselves were created nor do
-administrators have clear sense of the tradeoffs involved in deploying
-the predictions from these models. In the first stage of this project
-we use publicly available data from the High School Longitudinal Study
-and a model development framework based on the `tidymodels` package in
-`R` to evaluate the predictive accuracy of different modeling
-approaches, including elastic-net logistic regression, random forests,
-and neural networks. In the second stage we simulate the predicted
-impact of decision frameworks based on the results of
-predictions from the first stage, with a particular focus on how these
-results might affect currently marginalized groups in higher
-education. Our talk will emphasize both the development process used
-in R and the results of our analysis.
+As higher education decision makers increasingly turn to statistical
+and machine learning algorithms to predict student success, they often
+do so without a clear understanding of how these algorithms work or
+the tradeoffs made when basing decisions upon their predictions. Of
+particular concern are hidden biases inherent in an uncritical use of
+these algorithms that negatively affect already marginalized student
+populations. In this project we use `R` to transparently build a
+number of predictive algorithms and show how decisions based on their
+results might affect already underrepresented student groups in higher
+education. We first use publicly available data from the High School
+Longitudinal Study and the `tidymodels` framework to evaluate the
+predictive accuracy of different modeling approaches, including
+elastic net regression, random forests, and neural networks. We next
+use predictions from these models to simulate the impact of various
+decision frameworks on students, with a particular focus on how
+currently underrepresented groups in higher education would be
+affected. Our talk will emphasize both the development process used in
+`R` and the results of our analyses.
