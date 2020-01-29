@@ -3,7 +3,6 @@
 ## Trying to sort out the workflow/tune/dials way of doing this
 ## 2020-01-23
 
-
 library(tidyverse)
 library(tidymodels)
 library(workflows)
@@ -170,14 +169,15 @@ grad_wfl<-
 
 #glmn_grid <- expand.grid(penalty = 10^seq(-3, -1, length = 20), mixture = (0:5)/5)
 
+## Question: how to set control for max entropy approach
+
 ctrl <- control_resamples(allow_par = TRUE,
                           verbose = FALSE,
-                          save_pred=TRUE,
-                          extract=TRUE)
+                          save_pred=TRUE)
 
 ## Generate Results
 
-results_again=TRUE
+results_again=FALSE
 
 if (results_again || !file.exists(file.path(cddir, results_rds))) {
   
@@ -203,8 +203,21 @@ grad_res<-read_rds(file.path(cddir,results_rds))
 
 
 ## Best results from tuning
-show_best(grad_res, metric = "roc_auc", maximize = FALSE)
+grad_best<-
+  select_best(grad_res, metric = "roc_auc", maximize = FALSE)
 
+## Apply these best results to full dataset
+
+## Prep
+grad_rec_final<-prep(grad_rec)
+
+##Grab parameter estimates
+grad_mod_final<-finalize_model(grad_mod,grad_best)
+
+## Apply
+grad_fit<-grad_mod_final%>%
+  fit(ba_complete_formula,data=juice(grad_rec_final))
+  
 
 ## Get AUC
 roc_auc_vals<-
