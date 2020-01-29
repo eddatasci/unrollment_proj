@@ -1,0 +1,16 @@
+language: r
+cache: packages
+
+install:
+  - Rscript ./scripts/r/install_packages_travis.r 
+
+script:
+  - Rscript ./tests/testthat.R $TRAVIS_BUILD_DIR
+
+notifications:
+  email:
+    if: branch=master
+    on_failure: change
+    on_success: change
+    recipients:
+      - btskinner@coe.ufl.edu
