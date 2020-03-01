@@ -1,16 +1,19 @@
-## Running this the "workflows way"
+## Classification via Random Forest
+## Calculate grad probabilities via random forest
+## With full cross validation and model tuning via grid search
 ## Will Doyle
 ## Trying to sort out the workflow/tune/dials way of doing this
-## 2020-01-23
+## INIT:  2020-01-23
+## REV: 2020-02-29 
 
 library(tidyverse)
-library(tidymodels)
-library(workflows)
 library(tune)
 library(vip)
 library(glmnet)
 library(doParallel)
 library(ggridges)
+library(workflows)
+library(tidymodels)
 
 ## top-level directory; everything else is relative to here
 tldir <- file.path("..", "..")
@@ -26,7 +29,7 @@ fgdir <- file.path(tldir, "figures")
 els_zip <- "ELS_2002-12_PETS_v1_0_Student_CSV_Datasets.zip"
 els_url <- file.path("https://nces.ed.gov/EDAT/Data/Zip", els_zip)
 els_rds <- "els.rds"
-results_rds <- "results.rds"
+results_rds <- "rf_results.rds"
 
 
 ## ------------
@@ -157,14 +160,10 @@ ba_complete_formula <- formula("ba_complete ~ .")
 ## Recipe
 
 ## Set recipe
-grad_rec <- recipe(formula = ba_complete_formula)%>%
+grad_rec <- recipe(formula = ba_complete_formula,data=df_a)%>%
   step_naomit(all_predictors())%>%
   step_other(all_nominal(),threshold = .05)%>%
   step_dummy(all_nominal(),-ba_complete)
-
-rec_training_set <- prep(grad_rec, training = df_a)
-
-validation_data$recipes <- map(validation_data$splits, prepper, recipe = grad_rec)
 
 ## Set Model (This is the only thing that needs to vary)
 grad_mod <-
@@ -174,12 +173,6 @@ grad_mod <-
               min_n =tune("Min N"))%>%
   set_engine("randomForest")
 
-##Set Workflow
-grad_wfl <-
-  workflow() %>%
-  add_recipe(grad_rec) %>%
-  add_model(grad_mod)
-
 ## Take the prepped dataset and create resamples:
 ## How to do this within workflow?
 
@@ -187,16 +180,26 @@ prep_df_a<-prep(grad_rec)
 
 juiced_df_a<-juice(prep_df_a)
 
+
+##Set Workflow
+#grad_wfl <-
+#  workflow() %>%
+#  add_recipe(grad_rec) %>%
+#  add_model(grad_mod) 
+
+
 ## Temp: can expand
-validation_data<-vfold_cv(juiced_df_a,v=2)
+validation_data<-vfold_cv(juiced_df_a,v=10)
 
 ## Question: how to set control for max entropy approach
 
-ctrl <- control_grid(save_pred=FALSE,verbose = TRUE,allow_par = TRUE)
+ctrl <- control_grid(save_pred=TRUE,
+                     verbose = TRUE,
+                     allow_par = TRUE)
 
 ## Generate Results
 
-results_again = TRUE
+results_again = FALSE
 
 if (results_again || !file.exists(file.path(cddir, results_rds))) {
   
@@ -243,6 +246,43 @@ plot(grad_fit$fit)
 
 ## Variable importance plot
 varImpPlot(grad_fit$fit)
+
+auc_results<-
+  bind_rows(grad_res$.metrics)%>%
+  filter(.metric=="roc_auc")%>%
+  group_by(Mtry, Trees, `Min N`)%>%
+  group_by(Mtry, Trees, `Min N`)%>%
+  arrange(Mtry, Trees, `Min N`)%>%
+  mutate(max_auc=max(.estimate))%>%
+  mutate(med_auc=median(.estimate))%>%
+  mutate(min_auc=min(.estimate))%>%
+  mutate(group_name=paste(Mtry,
+                          ",",
+                          Trees,
+                          ",",
+                          `Min N`))%>%
+  ungroup()
+
+auc_results<-
+  auc_results%>%
+  mutate(id=sort(rep(seq(1:10),10)))
+
+gg<-ggplot(auc_results,
+           aes(x=fct_reorder(as_factor(`Min N`),
+                             .x=med_auc),
+               y=med_auc))
+
+gg<-gg+geom_segment(aes(x=fct_reorder(as_factor(`Min N`),
+                                      .x=med_auc),
+                        xend=fct_reorder(as_factor(`Min N`),
+                                          .x=med_auc),
+                            
+                        y=min_auc,
+                        yend=max_auc))
+gg<-gg+geom_point()
+gg<-gg+xlab("Minimum N")
+gg<-gg+ylab("AUC")
+gg
 
 ## When parallelism goes wrong . . .
 unregister <- function() {
