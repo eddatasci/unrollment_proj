@@ -10,6 +10,7 @@ library(tune)
 library(vip)
 library(glmnet)
 library(doParallel)
+library(ggridges)
 
 ## top-level directory; everything else is relative to here
 tldir <- file.path("..", "..")
@@ -29,7 +30,7 @@ results_rds <- "results.rds"
 
 
 ## ------------
-## functions
+## functionsg
 ## ------------
 
 ## quick paste functions
@@ -68,7 +69,6 @@ train_split <- 0.8
 
 ## bootstrap repetitions
 boot_reps <- 100
-
 
 ## variables we want to select from full ELS dataset, also setting
 ## data type for faster input since ELS is much larger than we need
@@ -119,7 +119,6 @@ if (unzip_again || !file.exists(file.path(cddir, els_rds))) {
 }
 
 
-
 df <- df %>%
   ## limit to students to started at four-year institutions
   filter(f2ps1sec %in% c(1:3)) %>%
@@ -152,34 +151,27 @@ likely_factors <- df_a %>%
   select_if( ~ is.factor(.)) %>%
   names
 
-## Resample data via monte carlo
-validation_data <-
-  mc_cv(df_a, split = train_split, times = boot_reps)
-
 ## Formula
 ba_complete_formula <- formula("ba_complete ~ .")
 
 ## Recipe
 
 ## Set recipe
-grad_rec <- recipe(formula = ba_complete_formula, data = df_a) %>%
-  ## convert factors to dummy
-  step_dummy(tidyselect::one_of(likely_factors)) %>%
-  ## center predictors
-  step_center(all_predictors())  %>%
-  ## rescale all predictors
-  step_scale(all_predictors()) %>%
-  ## NB: this is dicey and should be improved, but it's a
-  ## start; using K nearest neighbors to impute.
-  step_knnimpute(all_predictors())
+grad_rec <- recipe(formula = ba_complete_formula)%>%
+  step_naomit(all_predictors())%>%
+  step_other(all_nominal(),threshold = .05)%>%
+  step_dummy(all_nominal(),-ba_complete)
 
+rec_training_set <- prep(grad_rec, training = df_a)
+
+validation_data$recipes <- map(validation_data$splits, prepper, recipe = grad_rec)
 
 ## Set Model (This is the only thing that needs to vary)
 grad_mod <-
   rand_forest(mode="classification",
-              mtry= 10, 
-              trees =10 , 
-              min_n =10 )%>%
+              mtry= tune("Mtry"), 
+              trees =tune("Trees"), 
+              min_n =tune("Min N"))%>%
   set_engine("randomForest")
 
 ##Set Workflow
@@ -188,48 +180,47 @@ grad_wfl <-
   add_recipe(grad_rec) %>%
   add_model(grad_mod)
 
-## Tuning Grid
-#glmn_param <- parameters(penalty(), mixture())
+## Take the prepped dataset and create resamples:
+## How to do this within workflow?
 
-#glmn_sfd <- grid_max_entropy(glmn_param, size = 50)
+prep_df_a<-prep(grad_rec)
 
-#glmn_grid <- grad_wfl %>% parameters() %>% grid_max_entropy(size=50)
+juiced_df_a<-juice(prep_df_a)
 
-#glmn_grid <- expand.grid(penalty = 10^seq(-3, -1, length = 20), mixture = (0:5)/5)
+## Temp: can expand
+validation_data<-vfold_cv(juiced_df_a,v=2)
 
 ## Question: how to set control for max entropy approach
 
-ctrl <- control_resamples(allow_par = TRUE,
-                          verbose = FALSE,
-                          save_pred = TRUE)
+ctrl <- control_grid(save_pred=FALSE,verbose = TRUE,allow_par = TRUE)
 
 ## Generate Results
 
 results_again = TRUE
 
-
 if (results_again || !file.exists(file.path(cddir, results_rds))) {
-  ## Parallelalalalize
   
-  #cl<-makeCluster(4)
-  
-  
-  #registerDoParallel(cl)
-  
-  grad_res <- tune_grid(grad_wfl,
-                        resamples = validation_data,
-                        control = ctrl)
-  #stopCluster(cl)
-  
-  ## Notes: Right now, works just fine without parallel approach
-  ## Throws an error one_of() not found.
-  ## Seems like a scoping issue
+  grad_res <- tune_grid(ba_complete_formula,
+                        model=grad_mod,
+                        control = ctrl,
+                        resamples=validation_data)
+
   
   write_rds(grad_res, path = file.path(cddir, results_rds))
 } else{
   grad_res <- read_rds(file.path(cddir, results_rds))
 }
 
+
+## Get AUC
+roc_auc_vals <-
+  collect_metrics(grad_res,summarize=FALSE) %>%
+  filter(.metric == "roc_auc")
+
+
+gg<-ggplot(roc_auc_vals,aes(x=.estimate,y=Mtry))
+gg<-gg+geom_point()
+gg
 
 ## Best results from tuning
 grad_best <-
@@ -247,20 +238,14 @@ grad_mod_final <- finalize_model(grad_mod, grad_best)
 grad_fit <- grad_mod_final %>%
   fit(ba_complete_formula, data = juice(grad_rec_final))
 
-## Plot of lambda
-plot(grad_fit$fit, xvar = "lambda")
+## Model PLot
+plot(grad_fit$fit)
 
-# Variable importance
-vip(grad_fit, num_features = 20L, lambda = grad_best$penalty)
+## Variable importance plot
+varImpPlot(grad_fit$fit)
 
-## Get AUC
-roc_auc_vals <-
-  collect_metrics(grad_res) %>%
-  filter(.metric == "roc_auc")
-
-## PLot tuned results
-roc_auc_vals %>%
-  mutate(mixture = format(mixture)) %>%
-  ggplot(aes(x = penalty, y = mean, col = mixture)) +
-  geom_point() +
-  scale_x_log10()
+## When parallelism goes wrong . . .
+unregister <- function() {
+  env <- foreach:::.foreachGlobals
+  rm(list=ls(name=env), pos=env)
+}
