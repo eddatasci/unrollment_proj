@@ -36,9 +36,11 @@ In addition to traditional academic venues, we anticipate displaying
 these results in interactive formats.
 
 ## Who's on the core team? 
-[Will Doyle](https://peabody.vanderbilt.edu/bio/william-doyle), 
+[Will Doyle](https://peabody.vanderbilt.edu/bio/william-doyle),
+[Crystal Han](https://emraresearch.org/),
 [Ozan Jaquette](https://emraresearch.org/), 
 [Patricia Martin](https://emraresearch.org/),
+[Monique Ositelu](https://www.newamerica.org/our-people/monique-ositelu/),
 [Karina Salazar](https://www.coe.arizona.edu/karina-g-salazar), 
 [Benjamin Skinner](https://btskinner.io)
 
