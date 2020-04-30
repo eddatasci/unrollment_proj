@@ -118,7 +118,7 @@ on her previous work regarding spatial discrimination in college
 recruiting, and how the use of data analysis can reveal inequalities
 in how colleges recruit and retain students.   
 
-*Ben Skinner, Assistant Professor of Higher Education and Policy* at
+*Benjamin Skinner, Assistant Professor of Higher Education and Policy* at
 the University of Florida, will discuss the results of the first stage
 of the project, which involves generating predictive algorithms for
 bachelor's degree completion among recent high school graduates
