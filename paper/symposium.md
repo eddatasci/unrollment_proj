@@ -37,7 +37,7 @@ basis of these algorithms might affect currently marginalized groups
 in higher education.
 
 In the first stage we use publicly available data from the publicly
-available longitdunal studies and a model development framework based
+available longitudinal studies and a model development framework based
 on the “tidymodels” package in the statistical programming language R
 to evaluate the predictive accuracy of different modeling approaches,
 including logistic regression, elastic-net logistic regression, random
@@ -61,7 +61,7 @@ research, where all data and code are publicly available, and research
 can be followed in "real time" as researchers post their results and
 discussions to GitHub, an open repository for code.  The project
 itself has several current key milestones, including the development
-of predicitive algorithms for college completion; simulation of
+of predictive algorithms for college completion; simulation of
 decision-making based on these algorithms; and calculating likely
 impacts for different groups of students based on these
 milestones. Martin will introduce the use of git and GitHub as a
@@ -138,7 +138,7 @@ immediately after each panelist's presentation, with time also
 reserved for discussion at the end. Attendees will be encouraged to
 access all of the materials made available by the team on GitHub and
 to provide their input and recommendations for the project as it
-proceeds.
+proceeds. 
 
 References:
 
