@@ -6,7 +6,13 @@ education decisionmaking.  In this project team members use an open
 source platform to provide transparency around how predictive
 algorithms in higher education are estimated and how decisions made on
 the basis of these algorithms might affect currently underserved
-students in higher education. Predictive algorithms have taken on an
+students in higher education. Predicitve algorithms are any predefined 
+computational procedure that provides a likely outcome for a given individual
+based on the individual's characteristics. For instance, using coefficients from 
+a regression to predict the likely earnings for an individual based on their level 
+of education would be an example of using a predictive algorithm. Predictive 
+algorithms must by necessity be based on observed relationships from the past.  
+Predictive algorithms have taken on an
 important role in decisionmaking in higher education, and have clear
 implications for participation for all (Eduventures, 2013; Ekowo &
 Palmer 2016). This project seeks to demistify how these algorithms
@@ -52,7 +58,7 @@ underserved groups in higher education (Williams et al 2018).
 
 The following panelists will present during the course of the symposium.
 
-*Patricia Martin, doctoral student at UCLA* and investigator with the
+*Patricia Martin, Doctoral Student at UCLA* and investigator with the
 Enrollment Management, Recruiting and Access Group, will provide an
 overview of the Unrollment Project, including both the substantive
 goals of the project and the process for undertaking research. The
@@ -69,6 +75,20 @@ model for open-source research collaborations that are available to
 the public in development, and will demonstrate how audience members
 can provide input and feedback to the research team as the work
 progresses. 
+
+*Benjamin Skinner, Assistant Professor of Higher Education and Policy* at
+the University of Florida, will discuss the results of the first stage
+of the project, which involves generating predictive algorithms for
+bachelor's degree completion among recent high school graduates
+attending four-year institutions. The data for this part of the study
+come from the Educational Longitudinal Study of 2002 (Ingels, et al
+2014). Using this data, the project predicts college graduation based
+on a large set of covariates, using four different modeling
+approaches: logistic regression, elastic-net logistic regression,
+random forests and neural nets (Hastie et al, 2009). Skinner will
+summarize the results of these models, including both standard
+measures of model fit and summaries of the substantive
+importance of these different measures of fit.   
 
 *Monique Ositelu, Senior Policy Analyst at the New America Foundation*,
 will discuss her work on the implications of using predictive
@@ -117,20 +137,6 @@ University of Arizona, will discuss how the unrollment project builds
 on her previous work regarding spatial discrimination in college
 recruiting, and how the use of data analysis can reveal inequalities
 in how colleges recruit and retain students.   
-
-*Benjamin Skinner, Assistant Professor of Higher Education and Policy* at
-the University of Florida, will discuss the results of the first stage
-of the project, which involves generating predictive algorithms for
-bachelor's degree completion among recent high school graduates
-attending four-year institutions. The data for this part of the study
-come from the Educational Longitudinal Study of 2002 (Ingels, et al
-2014). Using this data, the project predicts college graduation based
-on a large set of covariates, using four different modeling
-approaches: logistic regression, elastic-net logistic regression,
-random forests and neural nets (Hastie et al, 2009). Skinner will
-summarize the results of these models, including both standard
-measures of model fit and summaries of the substantive
-importance of these different measures of fit.   
 
 *Will Doyle, Professor of Higher Education at Vanderbilt University*,
 will introduce the panelists and moderate discussions. To provide for
