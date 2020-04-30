@@ -49,7 +49,7 @@ marginalized groups in higher education.
 
 The following panelists will present during the course of the symposium.
 
-Patricia Martin, doctoral student at UCLA and investigator with the
+*Patricia Martin, doctoral student at UCLA* and investigator with the
 Enrollment Management, Recruiting and Access Group, will provide an
 overview of the Unrollment Project, including both the substantive
 goals of the project and the process for undertaking research. The
@@ -60,28 +60,68 @@ discussions to GitHub, an open repository for code.  The project
 itself has several current key milestones, including the development
 of predicitive algorithms for college completion; simulation of
 decision-making based on these algorithms; and calculating likely
-impacts for different groups of students based on these milestones.
+impacts for different groups of students based on these
+milestones. Martin will introduce the use of git and GitHub as a
+model for open-source research collaborations that are available to
+the public in development, and will demonstrate how audience members
+can provide input and feedback to the research team as the work
+progresses. 
 
-Monique Ositelu, Senior Policy Analyst at the New America Foundation,
+*Monique Ositelu, Senior Policy Analyst at the New America Foundation*,
 will discuss her work on the implications of using predictive
 algorithms for individual institutions. These case studies of
 institutional decision-making will provide concrete examples of how
 predictive algorithms influence administrators' decision-making and
-thereby impacting students' chances of success.  
+thereby impacting students' chances of success.  This analysis
+evaluates the equity impacts of predictive analytics on enrollment
+management within higher education. In particular, we evaluate the
+unintended consequences of predictive analytics and implications on
+access for students of color and low-income students. We identify how
+sectors of higher education institutions are differentially affected
+by using algorithms for predicting enrollment and graduation. We
+identify which sectors reinforce existing inequities and limit access
+to higher education for underserved populations.
 
-Karina Salazar, Assistant Professor of Higher Education at the
+The sectors we will evaluate are 4-year public and 4-year private
+institutions, as well as Historically Black Colleges & Universities
+(HBCUs). We are selecting 4-year institutions because of the dominant
+presence of enrollment management within this particular sector. While
+private institutions have more discretion in the development and
+execution of institutional policies; public colleges have a unique
+commitment to provide access to higher education regionally, in which
+additional barriers to access -- such as enrollment management -- may
+jeopardize public institutions’ role within their region. Since HBCUs
+historically have a mission to enroll underserved populations, such as
+students of color, including this variation of 4-year institutions
+will provide an opportunity to compare institutional profiles of the
+types of sectors that may perpetuate inequities in accessing higher
+education with enrollment management tools.
+
+In response to the coronavirus, we anticipate that algorithms for
+enrollment management will shift to include non-traditional variables
+in attempts to accurately predict students’ enrollment behavior. For
+that reason, the analysis includes a mixed methods approach of
+semi-formal interviews with enrollment management vendors to identify
+how changes in enrollment management models may further exacerbate the
+inequities we gather from the quantitative analysis. Although we are
+using secondary data collected prior to the coronavirus pandemic,
+through a mixed-methods approach, we will develop implications on how
+vendors and institutions are perpetuating inequities to access higher
+education in the wake of COVID-19.
+
+*Karina Salazar, Assistant Professor of Higher Education* at the
 University of Arizona, will discuss how the unrollment project builds
 on her previous work regarding spatial discrimination in college
 recruiting, and how the use of data analysis can reveal inequalities
-in how colleges recruit and retain students.  
+in how colleges recruit and retain students.   
 
-Ben Skinner, Assistant Professor of Higher Education at the University
-of Florida, will discuss the results of the first stage of the
-project, which involves generating predictive algorithms for bachelor's
-degree completion among recent high school graduates attending
-four-year institutions. The data for this part of the study come from
-the Educational Longitudinal Study of 2002. Using this data, the
-project predicts college graduation based on a large set of
+*Ben Skinner, Assistant Professor of Higher Education and Policy* at the
+University of Florida, will discuss the results of the first stage of
+the project, which involves generating predictive algorithms for
+bachelor's degree completion among recent high school graduates
+attending four-year institutions. The data for this part of the study
+come from the Educational Longitudinal Study of 2002. Using this data,
+the project predicts college graduation based on a large set of
 covariates, using four different modeling approaches: logistic
 regression, elastic-net logistic regression, random forests and neural
 nets. Skinner will summarize the results of these models, including
@@ -97,21 +137,43 @@ access all of the materials made available by the team on GitHub and
 to provide their input and recommendations for the project as it
 proceeds.
 
-
 References:
 
-Mittelstadt, B. D., Allo, P., Taddeo, M., Wachter, S., & Floridi, L. (2016). The ethics of algorithms: Mapping the debate. Big Data & Society, 3(2)
+Ekowo, M., & Palmer, I. (2016). Predictive analytics in higher
+education: Five guiding principles for ethical use. Washington, DC:
+New America Foundation.
 
+Ekowo, M., & Palmer, I. (2016). The Promise and Peril of Predictive
+Analytics in Higher Education: A Landscape Analysis. Washington, DC:New America.
+
+Hastie, T., Tibshirani, R., & Friedman, J. (2009). The elements of statistical learning: data mining, inference, and prediction. Springer Science & Business Media.
+
+Kuhn, M., & Johnson, K. (2013). Applied predictive modeling (Vol. 26). New York: Springer.
 
 Lambrecht, A., & Tucker, C. (2019). Algorithmic bias? an empirical
 study of apparent gender-based discrimination in the display of stem
 career ads. Management Science, 65(7), 2966-2981.
 
+Mittelstadt, B. D., Allo, P., Taddeo, M., Wachter, S., & Floridi,
+L. (2016). The ethics of algorithms: Mapping the debate. Big Data &
+Society, 3(2) 1-21.
+
+Prinsloo, P., & Slade, S. (2014). Educational triage in open distance learning: Walking a moral tightrope. International Review of Research in Open and Distributed Learning, 15(4), 306-331.
+
 Salazar, K. G. (2019). The Wealth and Color of Off-Campus Recruiting
 by Public Research Universities.
 
+Salazar, K., Jaquette, O., & Han, C. (2019). Coming soon to a
+neighborhood near you? Offcampus recruiting by public research
+universities.
+
+Scholes, V. (2016). The ethics of using learning analytics to categorize students on risk. Educational Technology Research and Development, 64(5), 939-955.
+
+Slade, S., & Prinsloo, P. (2013). Learning analytics: Ethical issues and dilemmas. American Behavioral Scientist, 57(10), 1510-1529.
+
 Sweeney, L. (2013). Discrimination in online ad delivery. Queue, 11(3), 10-29.
 
+Williams, B. A., Brooks, C. F., & Shmargad, Y. (2018). How algorithms discriminate based on data they lack: Challenges, solutions, and policy implications. Journal of Information Policy, 8, 78-115.
 
 
 
