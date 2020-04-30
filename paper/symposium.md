@@ -5,7 +5,7 @@ ongoing project exploring the use of predictive algorithms in higher
 education decisionmaking.  In this project team members use an open
 source platform to provide transparency around how predictive
 algorithms in higher education are estimated and how decisions made on
-the basis of these algorithms might affect currently marginalized
+the basis of these algorithms might affect currently underserved
 students in higher education. Predictive algorithms have taken on an
 important role in decisionmaking in higher education, and have clear
 implications for participation for all (Eduventures, 2013; Ekowo &
@@ -33,7 +33,7 @@ could be used to predict access and success in higher education
 (Lambrecht & Tucker, 2019; Sweeney, 2013). As a
 result of this work we hope to provide transparency around how
 predictive algorithms are generated and how decisions made on the
-basis of these algorithms might affect currently marginalized groups
+basis of these algorithms might affect currently underserved groups
 in higher education.
 
 In the first stage we use publicly available data from the publicly
@@ -48,7 +48,7 @@ modeling to cross validation of results (Kuhn & Wickham, 2019). In the second st
 simulate the predicted impact of different decision-making frameworks
 based on the results of predictions from the first stage, with a
 particular focus on how these results might affect currently
-marginalized groups in higher education (Williams et al 2018).
+underserved groups in higher education (Williams et al 2018).
 
 The following panelists will present during the course of the symposium.
 
