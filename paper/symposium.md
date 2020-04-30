@@ -5,30 +5,32 @@ ongoing project exploring the use of predictive algorithms in higher
 education decisionmaking.  In this project team members use an open
 source platform to provide transparency around how predictive
 algorithms in higher education are estimated and how decisions made on
-the basis of these algorithms might affect currently marginalized students
-in higher education. Predictive algorithms have taken on an important
-role in decisionmaking in higher education, and have clear
-implications for participation for all. This project seeks to
-demistify how these algorithms work and to create a more open
-discussion about how these predictive models might affect
-participation in higher education. 
+the basis of these algorithms might affect currently marginalized
+students in higher education. Predictive algorithms have taken on an
+important role in decisionmaking in higher education, and have clear
+implications for participation for all (Eduventures, 2013; Ekowo &
+Palmer 2016). This project seeks to demistify how these algorithms
+work and to create a more open discussion about how these predictive
+models might affect participation in higher education.
 
 Administrators in colleges and universities in the United States have
-made increasing use of predictive algorithms for
-decision-making. College staff many times use these algorithms to
-predict which students will enroll in a given campus, and which
-students will complete a degree once enrolled. Once students are
-assigned either a predicted probability of an outcome or a predicted
-classification, different decisions can be made about how the
-institution will work with that student. For instance, students who
-are less likely to enroll may be offered less financial aid, as those
-funds could be targeted on students who are more likely to
+made increasing use of predictive algorithms for decision-making
+(Scholes, 2016; Slade, 2013). College staff many times use these
+algorithms to predict which students will enroll in a given campus,
+and which students will complete a degree once enrolled (Ekowo and
+Palmer, 2016). Once students are assigned either a predicted
+probability of an outcome or a predicted classification, different
+decisions can be made about how the institution will work with that
+student (Klempin et al, 2018). For instance, students who are less
+likely to enroll may be offered less financial aid, as those funds
+could be targeted on students who are more likely to
 enroll. Similarly, administrators may be less likely to admit a
 student when predictive algorithms suggest that the student has a low
 probability of completing a degree.
 
 In this project we explore possible biases in predictive models that
-could be used to predict access and success in higher education. As a
+could be used to predict access and success in higher education
+(Lambrecht & Tucker, 2019; Sweeney, 2013). As a
 result of this work we hope to provide transparency around how
 predictive algorithms are generated and how decisions made on the
 basis of these algorithms might affect currently marginalized groups
@@ -39,9 +41,10 @@ available longitdunal studies and a model development framework based
 on the “tidymodels” package in the statistical programming language R
 to evaluate the predictive accuracy of different modeling approaches,
 including logistic regression, elastic-net logistic regression, random
-forests, and neural networks.  The “tidymodels” framework allows for a
+forests, and neural networks (Kuhn & Wickham, 2019; Kuhn & Johnson,
+2013; Hastie, et al 2009).  The “tidymodels” framework allows for a
 start-to-finish data science pipeline from data wrangling through
-modeling to cross validation of results. In the second stage we
+modeling to cross validation of results (Kuhn & Wickham, 2019). In the second stage we
 simulate the predicted impact of different decision-making frameworks
 based on the results of predictions from the first stage, with a
 particular focus on how these results might affect currently
@@ -124,9 +127,9 @@ come from the Educational Longitudinal Study of 2002. Using this data,
 the project predicts college graduation based on a large set of
 covariates, using four different modeling approaches: logistic
 regression, elastic-net logistic regression, random forests and neural
-nets. Skinner will summarize the results of these models, including
+nets (Hastie et al, 2009). Skinner will summarize the results of these models, including
 both standard measures of model fit and summaries of the substantive
-importance of these different measures of fit.  
+importance of these different measures of fit.   
 
 Will Doyle, Professor of Higher Education at Vanderbilt University,
 will introduce the panelists and moderate discussions. To provide for
@@ -139,6 +142,10 @@ proceeds.
 
 References:
 
+Eduventures (2013). “Predictive Analytics in Higher Education:
+Data-Driven Decision-Making for the Student Life
+Cycle” Boston, MA: Eduventures.
+
 Ekowo, M., & Palmer, I. (2016). Predictive analytics in higher
 education: Five guiding principles for ethical use. Washington, DC:
 New America Foundation.
@@ -146,9 +153,27 @@ New America Foundation.
 Ekowo, M., & Palmer, I. (2016). The Promise and Peril of Predictive
 Analytics in Higher Education: A Landscape Analysis. Washington, DC:New America.
 
-Hastie, T., Tibshirani, R., & Friedman, J. (2009). The elements of statistical learning: data mining, inference, and prediction. Springer Science & Business Media.
+Hastie, T., Tibshirani, R., & Friedman, J. (2009). The elements of
+statistical learning: data mining, inference, and prediction. Springer
+Science & Business Media.
 
-Kuhn, M., & Johnson, K. (2013). Applied predictive modeling (Vol. 26). New York: Springer.
+Ingels, S.J., Pratt, D.J, Alexander, C.P., Jewell, D.M., Lauff,
+E. Mattox, T.L., and Wilson, D. (2014). Education Longitudinal Study
+of 2002 Third Follow-up Data File Documentation (NCES
+2014-364). National Center for Education Statistics, Institute of
+Education Sciences, U.S. Department of Education. Washington,
+DC. Retrieved from http://nces.ed.gov/pubsearch.
+
+Klempin, S. C., Grant, M. N., & Ramos, M. (2018). Practitioner
+Perspectives on the Use of Predictive Analytics in Targeted Advising
+for College Students. New York: Community College Research Center
+
+Kuhn, M., & Johnson, K. (2013). Applied predictive modeling
+(Vol. 26). New York: Springer.
+
+Kuhn, M. & Wickham, H. (2019). tidymodels: Easily Install and Load the
+ 'Tidymodels' Packages. R package version 0.0.3.  Retrieved from
+ https://CRAN.R-project.org/package=tidymodels
 
 Lambrecht, A., & Tucker, C. (2019). Algorithmic bias? an empirical
 study of apparent gender-based discrimination in the display of stem
@@ -158,7 +183,9 @@ Mittelstadt, B. D., Allo, P., Taddeo, M., Wachter, S., & Floridi,
 L. (2016). The ethics of algorithms: Mapping the debate. Big Data &
 Society, 3(2) 1-21.
 
-Prinsloo, P., & Slade, S. (2014). Educational triage in open distance learning: Walking a moral tightrope. International Review of Research in Open and Distributed Learning, 15(4), 306-331.
+Prinsloo, P., & Slade, S. (2014). Educational triage in open distance
+learning: Walking a moral tightrope. International Review of Research
+in Open and Distributed Learning, 15(4), 306-331.
 
 Salazar, K. G. (2019). The Wealth and Color of Off-Campus Recruiting
 by Public Research Universities.
