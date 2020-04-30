@@ -48,7 +48,7 @@ modeling to cross validation of results (Kuhn & Wickham, 2019). In the second st
 simulate the predicted impact of different decision-making frameworks
 based on the results of predictions from the first stage, with a
 particular focus on how these results might affect currently
-marginalized groups in higher education.
+marginalized groups in higher education (Williams et al 2018).
 
 The following panelists will present during the course of the symposium.
 
@@ -118,20 +118,21 @@ on her previous work regarding spatial discrimination in college
 recruiting, and how the use of data analysis can reveal inequalities
 in how colleges recruit and retain students.   
 
-*Ben Skinner, Assistant Professor of Higher Education and Policy* at the
-University of Florida, will discuss the results of the first stage of
-the project, which involves generating predictive algorithms for
+*Ben Skinner, Assistant Professor of Higher Education and Policy* at
+the University of Florida, will discuss the results of the first stage
+of the project, which involves generating predictive algorithms for
 bachelor's degree completion among recent high school graduates
 attending four-year institutions. The data for this part of the study
-come from the Educational Longitudinal Study of 2002. Using this data,
-the project predicts college graduation based on a large set of
-covariates, using four different modeling approaches: logistic
-regression, elastic-net logistic regression, random forests and neural
-nets (Hastie et al, 2009). Skinner will summarize the results of these models, including
-both standard measures of model fit and summaries of the substantive
+come from the Educational Longitudinal Study of 2002 (Ingels, et al
+2014). Using this data, the project predicts college graduation based
+on a large set of covariates, using four different modeling
+approaches: logistic regression, elastic-net logistic regression,
+random forests and neural nets (Hastie et al, 2009). Skinner will
+summarize the results of these models, including both standard
+measures of model fit and summaries of the substantive
 importance of these different measures of fit.   
 
-Will Doyle, Professor of Higher Education at Vanderbilt University,
+*Will Doyle, Professor of Higher Education at Vanderbilt University*,
 will introduce the panelists and moderate discussions. To provide for
 maximum interactivity, Doyle will moderate brief discussions
 immediately after each panelist's presentation, with time also
