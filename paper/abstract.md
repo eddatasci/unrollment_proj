@@ -1,5 +1,3 @@
-
-
 As higher education decision makers increasingly turn to statistical
 and machine learning algorithms to predict student success, they often
 do so without a clear understanding of how these algorithms work or
@@ -18,3 +16,4 @@ decision frameworks on students, with a particular focus on how
 currently underserved groups in higher education would be
 affected. Our talk will emphasize both the development process used in
 `R` and the results of our analyses.
+

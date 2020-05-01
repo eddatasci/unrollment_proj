@@ -7,6 +7,8 @@ output: github_document
 ```{r}
 library(tidyverse)
 library(tidymodels)
+library(workflows)
+library(tune)
 ```
 
 ## Directory structure and file names/paths
@@ -219,6 +221,7 @@ recipe_function <- function(df, formula, likely_factors) {
 ```
 
 
+
 ```{r}
 ## H/T: https://www.brodrigues.co/blog/2018-11-25-tidy_cv/
 
@@ -275,6 +278,107 @@ grad_class <- function(formula, likely_factors, split, id, prog_bar) {
 }
 ```
 
+
+```{r}
+
+## Set recipe
+grad_rec<-recipe(formula=ba_complete_formula,data=df_a)%>%
+        ## NB: this is dicey and should be improved, but it's a
+        ## start; using K nearest neighbors to impute.
+        step_knnimpute(all_predictors()) %>%
+        ## convert factors to dummy
+        step_dummy(one_of(likely_factors)) %>%
+        ## center predictors
+        step_center(all_predictors())  %>%
+        ## rescale all predictors
+        step_scale(all_predictors())
+
+## Set Model
+grad_mod<-
+  logistic_reg()%>%
+  set_engine("glm")
+
+##Set Workflow 
+grad_wfl<-
+  workflow()%>%
+  add_recipe(grad_rec)%>%
+  add_model(grad_mod)
+```
+
+```{r}
+if (results_again || !file.exists(file.path(cddir, results_rds))) {
+  grad_res <-
+    validation_data %>%
+    mutate(workflows = map(splits,  ~ fit(grad_wfl, data = analysis(.))))
+  
+  write_rds(grad_res, path = file.path(cddir, results_rds))
+} else{
+  read_rds(file.path(cddir,results_rds))
+}
+```
+
+```{r}
+results_again=TRUE
+if (results_again || !file.exists(file.path(cddir, results_rds))) {
+  
+  grade_res<-fit_resamples(grad_wfl,
+                resamples=validation_data,
+                control=control_resamples(save_pred=TRUE))
+  
+  write_rds(grad_res, path = file.path(cddir, results_rds))
+}
+read_rds(file.path(cddir,results_rds))
+
+```
+
+
+```{r}
+## Predict probabilities
+grad_pr_pred=map2_dfr(grad_res$workflows,
+                   grad_res$splits,
+                   ~predict(.x,assessment(.y),type="prob"),
+                   .id="fold")
+
+## Predict classification
+grad_class_pred=map2_dfr(grad_res$workflows,
+                   grad_res$splits,
+                   ~predict(.x,assessment(.y),type="class"),
+                   .id="id")
+
+## Grab actual outcome
+outcomes<-map_dfr(grad_res$splits,
+                  ~assessment(.x)%>%select(ba_complete)%>%
+                    rename("truth"="ba_complete"))
+
+## Combine
+grad_pred<-bind_cols(grad_pr_pred,
+                     select(grad_class_pred,.pred_class),
+                     outcomes)
+```
+
+```{r}
+## Calculate AUC by CV ID
+auc <- grad_pred %>%
+    filter(!is.na(.pred_Completed)) %>% 
+    group_by(fold) %>%
+    roc_auc(truth = truth,
+            prediction = .pred_Completed)
+```
+
+```{r dens_auc}
+## plot distribution of AUC values
+g <- ggplot(auc, aes(x = .estimate)) +
+    geom_density(fill = "lightblue", alpha = .5) +
+    labs(x = "AUC",
+         y = "Density")
+
+## print in document
+g
+```
+
+
+
+
 ```{r}
 
 ## DONT RUN UNLESS YOU HAVE TO
@@ -295,15 +399,16 @@ if (unzip_again || !file.exists(file.path(cddir, results_rds))) {
     ## write results as rds
     write_rds(results, path = file.path(cddir, results_rds))
 
+
 } else {
     ## read existing results
-    read_rds(path=file.path(cddir, results_rds))    
+    results<-read_rds(path=file.path(cddir, results_rds))    
 } 
 
 ```
 
 ```{r}
-## get AUC across bootstraps
+## get AUC across bootstrapsc 
 auc <- results %>%
     filter(!is.na(.pred_Completed)) %>% 
     group_by(id) %>%
