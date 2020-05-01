@@ -5,8 +5,8 @@ ongoing project exploring the use of predictive algorithms in higher
 education decisionmaking.  In this project team members use an open
 source platform to provide transparency around how predictive
 algorithms in higher education are estimated and how decisions made on
-the basis of these algorithms might affect currently underserved
-students in higher education. Predicitve algorithms are any predefined 
+the basis of these algorithms might be biased against currently underserved
+students in higher education. Predictive algorithms are any predefined 
 computational procedure that provides a likely outcome for a given individual
 based on the individual's characteristics. For instance, using coefficients from 
 a regression to predict the likely earnings for an individual based on their level 
@@ -15,7 +15,7 @@ algorithms must by necessity be based on observed relationships from the past.
 Predictive algorithms have taken on an
 important role in decisionmaking in higher education, and have clear
 implications for participation for all (Eduventures, 2013; Ekowo &
-Palmer 2016). This project seeks to demistify how these algorithms
+Palmer 2016). This project seeks to demystify how these algorithms
 work and to create a more open discussion about how these predictive
 models might affect participation in higher education.
 
@@ -50,8 +50,9 @@ including logistic regression, elastic-net logistic regression, random
 forests, and neural networks (Kuhn & Wickham, 2019; Kuhn & Johnson,
 2013; Hastie, et al 2009).  The “tidymodels” framework allows for a
 start-to-finish data science pipeline from data wrangling through
-modeling to cross validation of results (Kuhn & Wickham, 2019). In the second stage we
-simulate the predicted impact of different decision-making frameworks
+modeling to cross validation of results (Kuhn & Wickham, 2019). 
+
+In the second stage we simulate the predicted impact of different decision-making frameworks
 based on the results of predictions from the first stage, with a
 particular focus on how these results might affect currently
 underserved groups in higher education (Williams et al 2018).
@@ -62,7 +63,7 @@ The following panelists will present during the course of the symposium.
 Enrollment Management, Recruiting and Access Group, will provide an
 overview of the Unrollment Project, including both the substantive
 goals of the project and the process for undertaking research. The
-Unrollment project has an unusual structure for higher education
+Unrollment Project has an unusual structure for higher education
 research, where all data and code are publicly available, and research
 can be followed in "real time" as researchers post their results and
 discussions to GitHub, an open repository for code.  The project
@@ -138,9 +139,9 @@ on her previous work regarding spatial discrimination in college
 recruiting, and how the use of data analysis can reveal inequalities
 in how colleges recruit and retain students.   
 
-*Will Doyle, Professor of Higher Education at Vanderbilt University*,
+*Will Doyle, Professor of Higher Education at Vanderbilt University*, and *Ozan Jaquette Assistant Professor at UCLA*
 will introduce the panelists and moderate discussions. To provide for
-maximum interactivity, Doyle will moderate brief discussions
+maximum interactivity, Doyle and Jaquette will moderate brief discussions
 immediately after each panelist's presentation, with time also
 reserved for discussion at the end. Attendees will be encouraged to
 access all of the materials made available by the team on GitHub and
