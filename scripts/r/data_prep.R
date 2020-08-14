@@ -1,3 +1,12 @@
+################################################################################
+##
+## [ PROJ ] Unrollment project
+## [ FILE ] data_prep.r
+## [ AUTH ] Will Doyle @wdoyle42
+## [ INIT ] 2020-07-15
+## Takes raw ELS data, grabs outcome, filter, and id variables, and includes
+## full range of time-appropriate features, dropping perfectly collinear
+################################################################################
 
 
 library(tidyverse)
@@ -5,6 +14,7 @@ library(tidymodels)
 library(workflows)
 library(tune)
 library(lubridate)
+library(caret)
 
 
 ## top-level directory; everything else is relative to here
@@ -42,6 +52,9 @@ recode_missing <- function(x, val) {
   ifelse(x %in% val, NA, x)
 }
 
+## What prop of X is missing? 
+prop_na<-function(x){sum(is.na(x))/length(x)}
+
 
 ## ------------
 ## macros
@@ -55,7 +68,7 @@ unzip_again <- TRUE
 ## missing values used across ELS variables
 ## CAUTION: these are appropriate for variables we select, but may not
 ## be for all ELS variables; change as appropriate
-els_missing_vals <- c(-1,-3,-4,-7, -8,-9)
+els_missing_vals <- c(-1,-2,-3,-4,-5,-6,-7,-8,-9,"Other")
 
 ## Proportion to include in a factor: what's the minimum proportion of cases to include
 ## as a factor level
@@ -66,6 +79,14 @@ factor_prop = .05
 ## levels that differentiates between factors and not?
 
 n_levels = 20
+
+## What proportion of missing is acceptable?
+
+prop_miss=.2
+
+## When are variables too highly correlated to retain?
+
+corr_cutoff=.999
 
 ## check if working (RDS) file exists
 if (unzip_again || !file.exists(file.path(cddir, els_rds))) {
@@ -133,4 +154,84 @@ els <- df %>%
   mutate(date_of_survey = paste0(byqxdatp, "01")) %>% ## add a day for ymd
   mutate(date_of_survey = ymd(date_of_survey)) %>% ## convert
   mutate(age_interval = dob %--% date_of_survey) %>% ## get interval
-  mutate(age = (age_interval %/% months(1)) / 12) ## convert to months, months/12=years
+  mutate(age = (age_interval %/% months(1)) / 12)%>%  ## convert to months, months/12=years
+  select(-dob,-date_of_survey,-age_interval)%>%
+  mutate_all(~ recode_missing(.x, els_missing_vals))%>%
+  mutate_if(
+    .,
+    .predicate = function(x)
+      few_unique(x),
+    .funs = list(as_factor)
+  )
+
+## Missing proportions
+
+els_keep_names<-els%>%
+  summarise_all(prop_na)%>%
+  select(which(.<prop_miss))%>%
+  names()
+
+els<-els%>%select(all_of(els_keep_names))
+
+likely_factors <- els %>%
+  select(-ba_complete) %>%
+  select_if( ~ (is.factor(.))) %>%
+  names()
+
+
+## https://topepo.github.io/caret/pre-processing.html#corr
+##Drop Zero Variance vars 
+zv<-nearZeroVar(els)
+els<-els[,-zv]
+
+
+## Variables to exclude from collinearity: mostly composites and
+## frequently used
+
+exclude_vars<-c("stu_id",
+                "ba_complete")
+last_vars<-c(                
+                "f2ps1sec",
+                "bysex",
+                "byrace",
+                "bymothed",
+                "byfathed",
+                "bypared",
+                "bynels2m",
+                "bynels2r",
+                "byincome",
+                "byses1",
+                "bystexp",
+                "byoccum",
+                "byoccuf")
+
+## Perfect collinearity: find dummy variables
+els_d<-els%>%select(!all_of(c(exclude_vars,drop_vars))) %>%
+  select(all_of(last_vars),!all_of(last_vars))%>% ## Get composites listed second
+  dummyVars("~.",data=.,fullRank = TRUE)
+
+## Create data set with dummy variables
+els_dmy<-data.frame(predict(els_d,newdata = els))
+
+## calculate covariance and then correlation, pairwise
+## Long runtime (100s)
+c<-els_dmy%>%
+    cov(use="pairwise.complete.obs")%>% ## bc of missing data
+    cov2cor() ## for speed
+
+## Identify highly correlated
+h_c<- findCorrelation(c, cutoff = corr_cutoff,verbose = TRUE,names=TRUE)
+
+## examine by hand and parse
+
+h_c<-h_c%>%
+  str_match(.,"^([^.]+)") ## Drop periods from dummies
+
+h_c<-h_c[,1] 
+h_c<-unique(h_c)  
+
+
+drop_vars<-c("f1occuf","f1stlang","f1mothed","f1fathed","f1pared","byses2","f1ses2","bys14","f1stexp")
+
+
+
