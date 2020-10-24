@@ -16,7 +16,6 @@ library(tune)
 library(lubridate)
 library(caret)
 
-
 ## top-level directory; everything else is relative to here
 tldir <- file.path("..", "..")
 
@@ -155,7 +154,7 @@ els <- df %>%
   mutate(date_of_survey = ymd(date_of_survey)) %>% ## convert
   mutate(age_interval = dob %--% date_of_survey) %>% ## get interval
   mutate(age = (age_interval %/% months(1)) / 12)%>%  ## convert to months, months/12=years
-  select(-dob,-date_of_survey,-age_interval)%>%
+  select(-dob,-date_of_survey,-age_interval,-bydob_p)%>%
   mutate_all(~ recode_missing(.x, els_missing_vals))%>%
   mutate_if(
     .,
@@ -184,7 +183,6 @@ likely_factors <- els %>%
 zv<-nearZeroVar(els)
 els<-els[,-zv]
 
-
 ## Variables to exclude from collinearity: mostly composites and
 ## frequently used
 
@@ -202,8 +200,11 @@ last_vars<-c(
                 "byincome",
                 "byses1",
                 "bystexp",
-                "byoccum",
                 "byoccuf")
+
+
+drop_vars<-c("f1occuf","f1stlang","f1mothed","f1fathed","f1pared","byses2","f1ses2","bys14","f1stexp")
+
 
 ## Perfect collinearity: find dummy variables
 els_d<-els%>%select(!all_of(c(exclude_vars,drop_vars))) %>%
@@ -230,8 +231,5 @@ h_c<-h_c%>%
 h_c<-h_c[,1] 
 h_c<-unique(h_c)  
 
-
-drop_vars<-c("f1occuf","f1stlang","f1mothed","f1fathed","f1pared","byses2","f1ses2","bys14","f1stexp")
-
-
+saveRDS(els,cddir%+%"els.Rds")
 
